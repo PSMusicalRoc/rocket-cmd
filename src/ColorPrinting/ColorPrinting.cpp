@@ -13,6 +13,11 @@ void ColorPrinting::println(std::string msg, ColorCode fg, ColorCode bg, StyleCo
     std::cout << std::endl;
 }
 
+std::string ColorPrinting::getPrintOutput(std::string msg, ColorCode fg, ColorCode bg, StyleCode style)
+{
+    return genANSICode(fg, bg, style) + msg + "\x1b[m";
+}
+
 std::string ColorPrinting::genANSICode(ColorCode fg, ColorCode bg, StyleCode style) {
     std::string out = "\x1b[";
     out += (style != StyleCode::NONE) ? std::to_string(style) + ";" : "";

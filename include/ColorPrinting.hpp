@@ -32,6 +32,7 @@ public:
     };
     static void print(std::string msg, ColorCode fg = RESET, ColorCode bg = RESET, StyleCode style = NONE);
     static void println(std::string msg, ColorCode fg = RESET, ColorCode bg = RESET, StyleCode style = NONE);
+    static std::string getPrintOutput(std::string msg, ColorCode fg = RESET, ColorCode bg = RESET, StyleCode style = NONE);
 
 private:
     static std::string genANSICode(ColorCode fg, ColorCode bg, StyleCode style);

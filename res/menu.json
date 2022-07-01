@@ -1,0 +1,20 @@
+{
+    "title": "Root",
+    "submenus":
+    [
+        {
+            "title": "Submenu 1",
+            "submenus":
+            [
+                {
+                    "title": "inside sub1",
+                    "submenus": 0
+                }
+            ]
+        },
+        {
+            "title": "Submenu 2",
+            "submenus": 0
+        }
+    ]
+}

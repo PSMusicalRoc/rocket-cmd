@@ -1,4 +1,9 @@
 #include <ncurses.h>
+#include <iostream>
+#include <fstream>
+
+#include <nlohmann/json.hpp>
+
 #include "ColorPrinting.hpp"
 
 #include "Menu/_MenuGlobals.hpp"
@@ -10,15 +15,48 @@ typedef std::shared_ptr<AbstractMenu> AbstractMenuPointer;
 
 AbstractMenuPointer root;
 
-void init_menu() {
-    AbstractMenuPointer sub1 = Submenu::Instantiate("Submenu 1");
-    AbstractMenuPointer sub2 = Submenu::Instantiate("Submenu 2");
-    AbstractMenuPointer sub15 = Submenu::Instantiate("Submenu 1.5");
+void _recurse_create_menu(nlohmann::json& pos, AbstractMenuPointer current_menu) {
+    if (pos["submenus"].is_array())
+    {
+        // Step 4: Introduce an iterative loop
+        for (int i = 0; i < pos["submenus"].size(); i++)
+        {
+            AbstractMenuPointer new_menu = Submenu::Instantiate(pos["submenus"][i]["title"]);
+            current_menu->AddSubmenu(new_menu);
+            _recurse_create_menu(pos["submenus"][i], new_menu);
+        }
+    }
+}
 
-    root = RootMenu::Instantiate("Root");
-    root->AddSubmenu(sub1);
-    root->AddSubmenu(sub2);
-    root->AddSubmenu(sub15, 1);
+void init_menu() {
+    std::fstream file;
+    file.open("res/menu.json");
+    if (file.is_open())
+    {
+        nlohmann::json menu_file;
+        nlohmann::json current_json;
+        
+        
+        // Step 1: Get Root and JSON file
+        file >> menu_file;
+        if (!menu_file["title"].is_string())
+        {
+            std::cout << "Could not load json file?" << std::endl;
+        }
+        root = RootMenu::Instantiate(menu_file["title"]);
+
+
+
+        // Step 2: Set current menu to root and current json
+        // to root position
+        current_json = nlohmann::json(menu_file);
+
+        
+
+        // Step 3: Check if current_json["submenus"] is a list
+        _recurse_create_menu(menu_file, root);
+    }
+    
 }
 
 
@@ -75,7 +113,6 @@ int main() {
                 Menu::CURRENT_MENU->Select();
                 break;
             case 27: //ESC
-                //Menu::shouldContinue = false;
                 nodelay(stdscr, true);
                 temp = getch();
                 nodelay(stdscr, false);

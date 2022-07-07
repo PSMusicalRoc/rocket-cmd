@@ -1,20 +1,42 @@
 {
-    "title": "Root",
+    "title": "RocketCMD",
     "submenus":
     [
         {
-            "title": "Submenu 1",
+            "title": "Interesting Stuff",
             "submenus":
             [
                 {
-                    "title": "inside sub1",
+                    "title": "Secrets ooooooh",
                     "submenus": 0
+                },
+                {
+                    "title": "All my passwords",
+                    "submenus":
+                    [
+                        {
+                            "title": "SperSmashBurdraas",
+                            "submenus": 0
+                        }
+                    ]
                 }
             ]
         },
         {
-            "title": "Submenu 2",
-            "submenus": 0
+            "title": "Not Interesting Stuff",
+            "submenus":
+            [
+                {
+                    "title": "Launch Firefox",
+                    "submenus": 0,
+                    "action": "firefox"
+                },
+                {
+                    "title": "R E C U R S E",
+                    "submenus": 0,
+                    "action": "./a.out"
+                }
+            ]
         }
     ]
 }

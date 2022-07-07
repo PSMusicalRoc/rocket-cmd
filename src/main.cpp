@@ -10,6 +10,7 @@
 
 #include "Menu/RootMenu.hpp"
 #include "Menu/Submenu.hpp"
+#include "Menu/ApplicationMenu.hpp"
 
 typedef std::shared_ptr<AbstractMenu> AbstractMenuPointer;
 
@@ -21,9 +22,17 @@ void _recurse_create_menu(nlohmann::json& pos, AbstractMenuPointer current_menu)
         // Step 4: Introduce an iterative loop
         for (int i = 0; i < pos["submenus"].size(); i++)
         {
-            AbstractMenuPointer new_menu = Submenu::Instantiate(pos["submenus"][i]["title"]);
-            current_menu->AddSubmenu(new_menu);
-            _recurse_create_menu(pos["submenus"][i], new_menu);
+            if (!pos["submenus"][i]["action"].empty())
+            {
+                AbstractMenuPointer new_menu = ApplicationMenu::Instantiate(pos["submenus"][i]["title"], pos["submenus"][i]["action"]);
+                current_menu->AddSubmenu(new_menu);
+            }
+            else
+            {
+                AbstractMenuPointer new_menu = Submenu::Instantiate(pos["submenus"][i]["title"]);
+                current_menu->AddSubmenu(new_menu);
+                _recurse_create_menu(pos["submenus"][i], new_menu);
+            }
         }
     }
 }
